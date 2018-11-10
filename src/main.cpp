@@ -1,9 +1,16 @@
 #include <Arduino.h>
+#include <usb_keyboard.h>
 
 void setup() {
-    // put your setup code here, to run once:
+    pinMode(0, INPUT_PULLUP);
 }
 
 void loop() {
-    // put your main code here, to run repeatedly:
+    if(!digitalRead(0)){
+        Keyboard.set_key0(KEY_0);
+    } else {
+        Keyboard.set_key0(0);
+    }
+    Keyboard.send_now();
+    delay(100);
 }
