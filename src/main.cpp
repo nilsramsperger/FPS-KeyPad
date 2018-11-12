@@ -49,11 +49,11 @@ void loop() {
 
 void processPinkyButtons() {
     if(isPressed(BUTTON_9)) {
-        Keyboard.set_key1(KEY_LEFT_SHIFT);
+        Keyboard.set_modifier(MODIFIERKEY_LEFT_SHIFT);
     } else if(isPressed(BUTTON_11)) {
-        Keyboard.set_key1(KEY_LEFT_CTRL);
+        Keyboard.set_modifier(MODIFIERKEY_LEFT_CTRL);
     } else {
-        Keyboard.set_key1(0);
+        Keyboard.set_modifier(0);
     }
 }
 
