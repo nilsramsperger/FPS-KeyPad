@@ -44,7 +44,7 @@ void loop() {
     processIndexButtons();
     processThumbButtons();
     Keyboard.send_now();
-    delay(100);
+    delay(1);
 }
 
 void processPinkyButtons() {
