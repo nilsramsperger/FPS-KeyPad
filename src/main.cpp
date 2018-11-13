@@ -14,12 +14,47 @@
 #define BUTTON_12 11
 #define BUTTON_13 12
 
+#define NELEMS(x)  (sizeof(x) / sizeof((x)[0]))
+
 void processPinkyButtons();
 void processRingButtons();
 void processMiddleButtons();
 void processIndexButtons();
-void processThumbButtons();
+void processThumbButton();
+void processModifierButton();
 boolean isPressed(uint8_t button);
+
+boolean modifierIsPressed = false;
+
+struct PinkyFinger {
+    uint8_t buttons[2] = { BUTTON_9, BUTTON_11 };
+    uint16_t keys[2] = { MODIFIERKEY_LEFT_SHIFT, MODIFIERKEY_LEFT_CTRL };
+    uint16_t keysModified[2] = { 0, 0 };
+} pinkyFinger;
+
+struct RingFinger {
+    uint8_t buttons[2] = { BUTTON_1, BUTTON_5 };
+    uint16_t keys[2] = { KEY_Q, KEY_A};
+    uint16_t keysModified[2] = { 0, 0 };
+} ringFinger;
+
+struct MiddleFinger {
+    uint8_t buttons[2] = { BUTTON_2, BUTTON_6 };
+    uint16_t keys[2] = { KEY_W, KEY_S};
+    uint16_t keysModified[2] = { 0, 0 };
+} middleFinger;
+
+struct IndexFinger {
+    uint8_t buttons[5] = { BUTTON_3, BUTTON_4, BUTTON_7, BUTTON_8, BUTTON_10 };
+    uint16_t keys[5] = { KEY_E, KEY_R, KEY_D, KEY_F, KEY_C };
+    uint16_t keysModified[5] = { 0, 0, 0 ,0 ,0 };
+} indexFinger;
+
+struct Thumb {
+    uint8_t buttons[1] = { BUTTON_12 };
+    uint16_t keys[1] = { KEY_SPACE };
+    uint16_t keysModified[1] = { 0 };
+} thumb;
 
 void setup() {
     pinMode(BUTTON_1, INPUT_PULLUP);
@@ -38,68 +73,68 @@ void setup() {
 }
 
 void loop() {
+    processModifierButton();
+
     processPinkyButtons();
     processRingButtons();
     processMiddleButtons();
     processIndexButtons();
-    processThumbButtons();
+    processThumbButton();
+
     Keyboard.send_now();
     delay(1);
 }
 
+void processModifierButton() {
+    modifierIsPressed = isPressed(BUTTON_13);
+}
+
 void processPinkyButtons() {
-    if(isPressed(BUTTON_9)) {
-        Keyboard.set_modifier(MODIFIERKEY_LEFT_SHIFT);
-    } else if(isPressed(BUTTON_11)) {
-        Keyboard.set_modifier(MODIFIERKEY_LEFT_CTRL);
-    } else {
-        Keyboard.set_modifier(0);
+    for(int i = 0; i < 2; i++){
+        if(isPressed(pinkyFinger.buttons[i])){
+            Keyboard.set_modifier(modifierIsPressed ? pinkyFinger.keysModified[i] : pinkyFinger.keys[i]);
+            return;
+        }
     }
+    Keyboard.set_modifier(0);
 }
 
 void processRingButtons() {
-    if(isPressed(BUTTON_1)) {
-        Keyboard.set_key2(KEY_Q);
-    } else if(isPressed(BUTTON_5)) {
-        Keyboard.set_key2(KEY_A);
-    } else {
-        Keyboard.set_key2(0);
+    for(int i = 0; i < 2; i++){
+        if(isPressed(ringFinger.buttons[i])){
+            Keyboard.set_key1(modifierIsPressed ? ringFinger.keysModified[i] : ringFinger.keys[i]);
+            return;
+        }
     }
+    Keyboard.set_key1(0);
 }
 
 void processMiddleButtons() {
-    if(isPressed(BUTTON_2)) {
-        Keyboard.set_key3(KEY_W);
-    } else if(isPressed(BUTTON_6)) {
-        Keyboard.set_key3(KEY_S);
-    } else {
-        Keyboard.set_key3(0);
+    for(int i = 0; i < 2; i++){
+        if(isPressed(middleFinger.buttons[i])){
+            Keyboard.set_key2(modifierIsPressed ? middleFinger.keysModified[i] : middleFinger.keys[i]);
+            return;
+        }
     }
+    Keyboard.set_key2(0);
 }
 
 void processIndexButtons() {
-    if(isPressed(BUTTON_3)) {
-        Keyboard.set_key4(KEY_E);
-    } else if(isPressed(BUTTON_4)) {
-        Keyboard.set_key4(KEY_R);
-    } else if(isPressed(BUTTON_7)) {
-        Keyboard.set_key4(KEY_D);
-    } else if(isPressed(BUTTON_8)) {
-        Keyboard.set_key4(KEY_F);
-    } else if(isPressed(BUTTON_10)) {
-        Keyboard.set_key4(KEY_C);
-    } else {
-        Keyboard.set_key4(0);
+    for(int i = 0; i < 5; i++){
+        if(isPressed(indexFinger.buttons[i])){
+            Keyboard.set_key3(modifierIsPressed ? indexFinger.keysModified[i] : indexFinger.keys[i]);
+            return;
+        }
     }
+    Keyboard.set_key3(0);
 }
 
-void processThumbButtons() {
-    if(isPressed(BUTTON_12)) {
-        Keyboard.set_key5(KEY_SPACE);
-    } else if(isPressed(BUTTON_13)) {
-        Keyboard.set_key5(KEY_B);
-    } else {
-        Keyboard.set_key5(0);
+void processThumbButton() {
+    if(isPressed(thumb.buttons[0])) {
+        Keyboard.set_key4(modifierIsPressed ? thumb.keysModified[0] : thumb.keys[0]);
+    } 
+    else {
+        Keyboard.set_key4(0);
     }
 }
 
