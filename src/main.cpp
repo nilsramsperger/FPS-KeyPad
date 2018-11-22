@@ -47,7 +47,7 @@ struct MiddleFinger {
 struct IndexFinger {
     uint8_t buttons[5] = { BUTTON_3, BUTTON_4, BUTTON_7, BUTTON_8, BUTTON_10 };
     uint16_t keys[5] = { KEY_E, KEY_R, KEY_D, KEY_F, KEY_C };
-    uint16_t keysModified[5] = { KEY_3, KEY_G, KEY_6 ,0 ,0 };
+    uint16_t keysModified[5] = { KEY_3, KEY_G, KEY_6, KEY_ESC, 0 };
 } indexFinger;
 
 struct Thumb {

@@ -19,7 +19,7 @@ This is the firmware for a Teensy 3.2 to drive a custom left hand keypad for pla
 # Keys modified layout
 ```
  [1][2][3][G]
-  [4][5][6][]
+  [4][5][6][Esc]
 [B]     []   [][Mod]
  [A]
  ```
