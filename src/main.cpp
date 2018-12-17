@@ -14,6 +14,11 @@
 #define BUTTON_12 11
 #define BUTTON_13 12
 
+#define CLEAR_KEY 0
+#define CLEAR_MODIFIER 0
+
+#define POLLING_DELAY_MS 1
+
 #define NELEMS(x)  (sizeof(x) / sizeof((x)[0]))
 
 void processPinkyButtons();
@@ -47,13 +52,13 @@ struct MiddleFinger {
 struct IndexFinger {
     uint8_t buttons[5] = { BUTTON_3, BUTTON_4, BUTTON_7, BUTTON_8, BUTTON_10 };
     uint16_t keys[5] = { KEY_E, KEY_R, KEY_D, KEY_F, KEY_C };
-    uint16_t keysModified[5] = { KEY_3, KEY_G, KEY_6, KEY_ESC, 0 };
+    uint16_t keysModified[5] = { KEY_3, KEY_G, KEY_6, KEY_ESC, CLEAR_KEY };
 } indexFinger;
 
 struct Thumb {
     uint8_t buttons[1] = { BUTTON_12 };
     uint16_t keys[1] = { KEY_SPACE };
-    uint16_t keysModified[1] = { 0 };
+    uint16_t keysModified[1] = { CLEAR_KEY };
 } thumb;
 
 void setup() {
@@ -82,7 +87,7 @@ void loop() {
     processThumbButton();
 
     Keyboard.send_now();
-    delay(1);
+    delay(POLLING_DELAY_MS);
 }
 
 void processModifierButton() {
@@ -101,8 +106,8 @@ void processPinkyButtons() {
             return;
         }
     }
-    Keyboard.set_modifier(0);
-    Keyboard.set_key1(0);
+    Keyboard.set_modifier(CLEAR_MODIFIER);
+    Keyboard.set_key1(CLEAR_KEY);
 }
 
 void processRingButtons() {
@@ -112,7 +117,7 @@ void processRingButtons() {
             return;
         }
     }
-    Keyboard.set_key2(0);
+    Keyboard.set_key2(CLEAR_KEY);
 }
 
 void processMiddleButtons() {
@@ -122,7 +127,7 @@ void processMiddleButtons() {
             return;
         }
     }
-    Keyboard.set_key3(0);
+    Keyboard.set_key3(CLEAR_KEY);
 }
 
 void processIndexButtons() {
@@ -132,7 +137,7 @@ void processIndexButtons() {
             return;
         }
     }
-    Keyboard.set_key4(0);
+    Keyboard.set_key4(CLEAR_KEY);
 }
 
 void processThumbButton() {
@@ -140,7 +145,7 @@ void processThumbButton() {
         Keyboard.set_key5(modifierIsPressed ? thumb.keysModified[0] : thumb.keys[0]);
     } 
     else {
-        Keyboard.set_key5(0);
+        Keyboard.set_key5(CLEAR_KEY);
     }
 }
 
