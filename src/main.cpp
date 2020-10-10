@@ -95,19 +95,21 @@ void processModifierButton() {
 }
 
 void processPinkyButtons() {
+    uint16_t key1 = CLEAR_KEY;
+    uint16_t modifier = CLEAR_MODIFIER;
+
     for(int i = 0; i < 2; i++){
         if(isPressed(pinkyFinger.buttons[i])){
             if(modifierIsPressed){
-                Keyboard.set_key1(pinkyFinger.keysModified[i]);
+                key1 = pinkyFinger.keysModified[i];
             }
             else {
-                Keyboard.set_modifier(pinkyFinger.keys[i]);
+                modifier |= pinkyFinger.keys[i];
             }
-            return;
         }
     }
-    Keyboard.set_modifier(CLEAR_MODIFIER);
-    Keyboard.set_key1(CLEAR_KEY);
+    Keyboard.set_modifier(modifier);
+    Keyboard.set_key1(key1);
 }
 
 void processRingButtons() {
